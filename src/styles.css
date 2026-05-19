@@ -290,4 +290,26 @@ body {
   font-size: 16px;
   cursor: pointer;
   align-self: flex-end;
+  position: relative;
+  top: -15px;
+  left: -215px;
+}
+
+#exit-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ff80b5;
+  border: 2px solid #ff5599;
+  color: #1a1a2e;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0px #ff5599;
+  z-index: 999;
 }

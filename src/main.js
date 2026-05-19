@@ -128,3 +128,9 @@ function formatTime(seconds) {
   const s = Math.floor(seconds % 60).toString().padStart(2, '0');
   return `${m}:${s}`;
 }
+
+// Exit button
+document.getElementById('exit-btn').addEventListener('click', async () => {
+  const { exit } = window.__TAURI__.process;
+  await exit(0);
+});
