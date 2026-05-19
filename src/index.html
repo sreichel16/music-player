@@ -1,39 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri App</title>
-    <script type="module" src="/main.js" defer></script>
+    <title>Music Player</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet" />
   </head>
-
   <body>
-    <main class="container">
-      <h1>Welcome to Tauri</h1>
+    <div class="player">
 
-      <div class="row">
-        <a href="https://tauri.app" target="_blank">
-          <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-          target="_blank"
-        >
-          <img
-            src="/assets/javascript.svg"
-            class="logo vanilla"
-            alt="JavaScript logo"
-          />
-        </a>
+      <div class="disc">
+
+        <div class="screen">
+          <p class="screen-label">NOW PLAYING</p>
+          <h1 id="song-title">NO SONG LOADED</h1>
+          <p id="song-artist">--</p>
+          <div class="progress-container">
+            <span id="current-time">0:00</span>
+            <input type="range" id="progress-bar" value="0" />
+            <span id="total-time">0:00</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="ctrl-btn" id="prev-btn">⏮</button>
+          <button class="ctrl-btn" id="play-btn">▶</button>
+          <button class="ctrl-btn" id="next-btn">⏭</button>
+        </div>
+
+        <div class="volume-container">
+          <span>🔈</span>
+          <input type="range" id="volume-bar" min="0" max="1" step="0.01" value="1" />
+          <span>🔊</span>
+        </div>
+
+        <div class="action-btns">
+          <input type="file" id="file-input" accept="audio/*" multiple />
+          <label for="file-input" class="file-label">+ ADD</label>
+          <button id="playlist-btn">LIST ☰</button>
+          <button id="share-btn">SHARE ✉</button>
+        </div>
+
       </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
 
-      <form class="row" id="greet-form">
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greet-msg"></p>
-    </main>
+      <div class="playlist-panel" id="playlist-panel">
+        <p class="screen-label">PLAYLIST</p>
+        <ul id="playlist"></ul>
+      </div>
+
+    </div>
+    <audio id="audio"></audio>
+    <script src="main.js"></script>
   </body>
 </html>
