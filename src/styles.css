@@ -27,12 +27,10 @@ body {
 .disc {
   width: 340px;
   height: 340px;
-  border-radius: 50%;
   background: linear-gradient(145deg, #ffb3d1, #ffd6e7);
-  border: 4px solid #ff80b5;
-  box-shadow:
-    0 0 0 8px #ffc0d9,
-    0 0 0 12px #ff80b5;
+  background-image: url('assets/musicplayerbackgroundimage.png');
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,20 +42,22 @@ body {
 
 /* --- SCREEN --- */
 .screen {
-  width: 82%;
+  width: 61%;
+  height: 25%;
+  margin-bottom: 59px;
   background: #0d2137;
-  border-radius: 10px;
-  border: 3px solid #ff80b5;
-  padding: 10px;
+  border-radius: 3px;
+  padding: 0px 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .screen-label {
   color: #7efff5;
   font-size: 8px;
   letter-spacing: 3px;
+  margin-top: 2px;
 }
 
 #song-title {
@@ -91,13 +91,14 @@ body {
 #progress-bar {
   flex: 1;
   accent-color: #ffe066;
+  width: 100%;
 }
 
 /* --- CONTROLS --- */
 .controls {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 1px;
 }
 
 .ctrl-btn {
@@ -113,6 +114,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  top: -56px;
+  transform: scale(.85);
+}
+
+#prev-btn {
+  position: relative;
+  top: -57px;
+  transform: scale(.7);
+}
+
+#next-btn {
+  position: relative;
+  top: -57px;
+  transform: scale(.7);
 }
 
 .ctrl-btn:active {
@@ -124,12 +140,15 @@ body {
 .volume-container {
   display: flex;
   align-items: center;
-  gap: 6px;
-  width: 100%;
+  gap: 1px;
+  width: 77%;
+  position: relative;
+  top: -116px;
 }
 
 .volume-container span {
   font-size: 12px;
+  filter: brightness(0.6);
 }
 
 #volume-bar {
@@ -139,9 +158,13 @@ body {
 
 /* --- ACTION BUTTONS --- */
 .action-btns {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 6px;
-  width: 100%;
+  gap: 10px;
+  justify-content: center;
 }
 
 #file-input {
@@ -149,14 +172,19 @@ body {
 }
 
 .file-label, #playlist-btn, #share-btn {
-  flex: 1;
-  border-radius: 8px;
-  padding: 6px 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   text-align: center;
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .file-label {
@@ -164,6 +192,10 @@ body {
   border: 2px solid #3dc9c0;
   color: #1a1a2e;
   box-shadow: 3px 3px 0px #3dc9c0;
+  position: relative;
+  top: -65px;
+  left: -23px;
+  transform: scale(.8);
 }
 
 #playlist-btn {
@@ -171,6 +203,9 @@ body {
   border: 2px solid #ff80b5;
   color: #1a1a2e;
   box-shadow: 3px 3px 0px #ff80b5;
+  position: relative;
+  top: -35px;
+  transform: scale(1.2);
 }
 
 #share-btn {
@@ -178,6 +213,10 @@ body {
   border: 2px solid #e6c200;
   color: #1a1a2e;
   box-shadow: 3px 3px 0px #e6c200;
+  position: relative;
+  top: -55px;
+  left: 18px;
+  transform: scale(.9);
 }
 
 .file-label:active, #playlist-btn:active, #share-btn:active {
