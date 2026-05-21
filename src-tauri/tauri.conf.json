@@ -8,19 +8,20 @@
   },
   "app": {
     "withGlobalTauri": true,
-    "windows": [
-      {
-        "title": "music-player",
-        "width": 380,
-        "height": 380,
-        "resizable": false,
-        "decorations": false,
-        "transparent": true
-      }
-    ],
-    "security": {
-      "csp": null
-    }
+  "windows": [
+  {
+    "title": "music-player",
+    "width": 380,
+    "height": 380,
+    "resizable": false,
+    "decorations": false,
+    "transparent": true
+  }
+],
+   "security": {
+  "csp": null,
+  "dangerousDisableAssetCspModification": true
+}
   },
   "bundle": {
     "active": true,

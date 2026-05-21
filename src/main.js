@@ -16,6 +16,7 @@ const playlistPanel = document.getElementById('playlist-panel');
 let playlist = [];
 let currentIndex = 0;
 
+
 // Load songs from file picker
 fileInput.addEventListener('change', (e) => {
   const files = Array.from(e.target.files);
@@ -133,4 +134,115 @@ function formatTime(seconds) {
 document.getElementById('exit-btn').addEventListener('click', async () => {
   const { exit } = window.__TAURI__.process;
   await exit(0);
+});
+
+// Share button - generate shareable link
+document.getElementById('share-btn').addEventListener('click', async () => {
+  if (playlist.length === 0) {
+    alert('Add some songs first!');
+    return;
+  }
+
+  // Create status popup
+  const status = document.createElement('div');
+  status.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #0d2137;
+    border: 3px solid #ff80b5;
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 1000;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    color: #7efff5;
+    font-size: 11px;
+    min-width: 200px;
+  `;
+  status.id = 'share-status';
+  document.body.appendChild(status);
+
+  const setStatus = (msg) => {
+    console.log(msg);
+    status.innerHTML = `
+      <p style="letter-spacing: 2px; margin-bottom: 10px;">${msg}</p>
+      <button onclick="this.parentElement.remove()" style="background: #ff80b5; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: 'Share Tech Mono', monospace; font-size: 10px;">CANCEL</button>
+    `;
+  };
+
+  try {
+    setStatus('CONNECTING TO SUPABASE...');
+    
+    // Test connection first
+    const { data: testData, error: testError } = await supabaseClient
+      .from('playlists')
+      .select('count')
+      .limit(1);
+    
+    if (testError) {
+      setStatus(`CONNECTION ERROR: ${testError.message}`);
+      return;
+    }
+
+    setStatus('CONNECTED! UPLOADING SONGS...');
+    const songData = [];
+
+    for (let i = 0; i < playlist.length; i++) {
+      const song = playlist[i];
+      setStatus(`UPLOADING ${i + 1} OF ${playlist.length}:<br/>${song.name}`);
+      
+      const fileName = `${Date.now()}-${song.file.name}`;
+
+      const { error } = await supabaseClient.storage
+        .from('songs')
+        .upload(fileName, song.file, {
+          contentType: 'audio/mpeg',
+          upsert: true
+        });
+
+      if (error) {
+        setStatus(`UPLOAD FAILED:<br/>${error.message}`);
+        return;
+      }
+
+      const { data: urlData } = supabaseClient.storage
+        .from('songs')
+        .getPublicUrl(fileName);
+
+      songData.push({ name: song.name, url: urlData.publicUrl });
+      setStatus(`UPLOADED ${i + 1} OF ${playlist.length} ✓`);
+    }
+
+    setStatus('SAVING PLAYLIST...');
+    const shareCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    const { error: dbError } = await supabaseClient
+.from('playlists')
+  .upsert({ name: 'My Playlist', songs: songData, share_code: shareCode }, { onConflict: 'share_code' });
+
+    if (dbError) {
+      setStatus(`DATABASE ERROR:<br/>${dbError.message}`);
+      return;
+    }
+
+    const shareUrl = `https://chpiknoillslpmowgvdj.supabase.co/functions/v1/playlist?code=${shareCode}`;
+
+ status.innerHTML = `
+  <p style="color: #7efff5; font-size: 10px; letter-spacing: 3px; margin-bottom: 10px;">SHARE YOUR PLAYLIST</p>
+  <button id="open-link-btn" style="background: none; border: none; color: #ffe066; font-size: 14px; cursor: pointer; font-family: 'Share Tech Mono', monospace; text-decoration: underline;">🎵 Click to open playlist</button>
+  <br/><br/>
+  <button onclick="this.parentElement.remove()" style="background: #ff80b5; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: 'Share Tech Mono', monospace; font-size: 10px;">CLOSE</button>
+`;
+
+document.getElementById('open-link-btn').addEventListener('click', async () => {
+  window.__TAURI__.core.invoke('open_url', { url: shareUrl });
+
+await openUrl(shareUrl);
+});
+
+  } catch (err) {
+    setStatus(`ERROR: ${err.message}`);
+  }
 });
